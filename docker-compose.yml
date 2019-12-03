@@ -12,6 +12,7 @@ services:
       - 81:80
   # データベース
   db:
+    build: .
     image: mysql:5.7
     ports:
       - 3307:3306
