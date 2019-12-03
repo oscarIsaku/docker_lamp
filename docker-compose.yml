@@ -10,9 +10,10 @@ services:
       - .:/var/www/html
     ports:
       - 81:80
+
+
   # データベース
   db:
-    build: .
     image: mysql:5.7
     ports:
       - 3307:3306
@@ -22,7 +23,4 @@ services:
       MYSQL_USER: isaac
       MYSQL_PASSWORD: docker
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
-    volumes:
-      - ./mysql:/var/lib/mysql
-      - ./mysql/my.cnf:/var/lib/mysql/my.cnf
     
