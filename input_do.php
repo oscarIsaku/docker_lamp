@@ -2,7 +2,7 @@
 <pre>
 <?php
 //DB情報を読み込み
-require_once("database.php");
+require("database.php");
 
 try {
   $statement = $dbh->prepare('INSERT INTO memos SET memo=?, created_at=NOW()');

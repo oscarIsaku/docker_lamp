@@ -3,13 +3,21 @@
 <pre>
 <?php
 //DB情報を読み込み
-require_once("database.php");
+require("database.php");
 
-$records = $dbh->query('SELECT * FROM my_items');
-
-while ($record = $records->fetch()) {
-  print($record['item_name']. "\n");
-}
+$memos = $dbh->query('SELECT * FROM memos ORDER BY id DESC');
 ?>
+<article>
+<?php foreach($memos as $memo): ?>
+    <p>
+      <a href="memo.php?id=<?php print($memo['id']); ?>">
+        <?php print(mb_substr($memo['memo'], 0, 50)); ?>
+        <?php print((mb_strlen($memo['memo']) > 50 ? '...' : '')); ?>
+      </a>
+    </p>
+    <time><?php print($memo['created_at']); ?></time>
+  <hr>
+<?php endforeach; ?>
+</article>
 </pre>
 </html>
