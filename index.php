@@ -5,7 +5,18 @@
 //DB情報を読み込み
 require("database.php");
 
-$memos = $dbh->query('SELECT * FROM memos ORDER BY id DESC');
+if (isset($_REQUEST['page']) && is_numeric($_REQUEST['page'])) {
+  $page = $_REQUEST['page'];
+} else {
+  $page = 1;
+}
+
+
+$start = 5 * ($page - 1);
+$memos = $dbh->prepare('SELECT * FROM memos ORDER BY id DESC LIMIT ?,5');
+$memos->bindParam(1, $start, PDO::PARAM_INT);
+$memos->execute();
+
 ?>
 <article>
 <?php foreach($memos as $memo): ?>
@@ -18,6 +29,19 @@ $memos = $dbh->query('SELECT * FROM memos ORDER BY id DESC');
     <time><?php print($memo['created_at']); ?></time>
   <hr>
 <?php endforeach; ?>
+
+<?php if ($page >= 2): ?>
+<a href="index.php?page=<?php print($page-1); ?>"><?php print($page-1); ?>ページ目へ</a>
+ |
+<?php endif; ?>
+<?php 
+  $counts = $dbh->query('SELECT COUNT(*) as cnt FROM memos');
+  $count = $counts->fetch();
+  $max_page = floor($count['cnt'] / 5) ; 1;
+  if ($page < $max_page): 
+?>
+<a href="index.php?page=<?php print($page+1); ?>"><?php print($page+1); ?>ページ目へ</a>
+<?php endif; ?>
 </article>
 </pre>
 </html>
